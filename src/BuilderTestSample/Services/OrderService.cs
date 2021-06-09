@@ -55,10 +55,7 @@ namespace BuilderTestSample.Services
 
         private void ExpediteOrder(Order order)
         {
-            if(order.Customer.TotalPurchases > 5000 && order.Customer.CreditRating > 500)
-            {
-                order.IsExpedited = true;
-            }
+            order.IsExpedited = order.Customer.TotalPurchases > 5000 && order.Customer.CreditRating > 500;
         }
 
         private void AddOrderToCustomerHistory(Order order)
