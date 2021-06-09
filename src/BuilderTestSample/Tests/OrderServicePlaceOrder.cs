@@ -291,9 +291,6 @@ namespace BuilderTestSample.Tests
             Assert.Throws<InvalidAddressException>(() => _orderService.PlaceOrder(order));
         }
 
-
-
-
         [Fact]
         public void ThrowsExceptionWhenAddressCountryIsNull()
         {
@@ -315,5 +312,76 @@ namespace BuilderTestSample.Tests
 
             Assert.Throws<InvalidAddressException>(() => _orderService.PlaceOrder(order));
         }
+
+        [Fact]
+        public void ExpediteOrder()
+        {
+            var homeAddress = new AddressBuilder()
+                .WithTestValues()
+                .Build();
+
+            var customer = new CustomerBuilder()
+                .WithTestValues()
+                .HomeAddress(homeAddress)
+                .CreditRating(501)
+                .TotalPurchases(5001m)
+                .Build();
+
+            var order = _orderBuilder
+                            .WithTestValues(customer)
+                            .Build();
+
+            _orderService.PlaceOrder(order);
+            Assert.True(order.IsExpedited);
+        }
+
+
+        [Fact]
+        public void AddOrderToCustomerHistory()
+        {
+            var homeAddress = new AddressBuilder()
+                .WithTestValues()
+                .Build();
+
+            var customer = new CustomerBuilder()
+                .WithTestValues()
+                .HomeAddress(homeAddress)
+                .CreditRating(501)
+                .TotalPurchases(5001m)
+                .Build();
+
+            var order = _orderBuilder
+                            .WithTestValues(customer)
+                            .Build();
+
+            _orderService.PlaceOrder(order);
+            Assert.True(customer.OrderHistory.Count == 1);
+        }
+
+
+
+        [Fact]
+        public void UpdateTotalPurchases()
+        {
+            var startingTotalPurchases = 5001m;
+            var homeAddress = new AddressBuilder()
+                .WithTestValues()
+                .Build();
+
+            var customer = new CustomerBuilder()
+                .WithTestValues()
+                .HomeAddress(homeAddress)
+                .CreditRating(501)
+                .TotalPurchases(startingTotalPurchases)
+                .Build();
+
+            var order = _orderBuilder
+                            .WithTestValues(customer)
+                            .Build();
+
+            _orderService.PlaceOrder(order);
+            Assert.True(customer.TotalPurchases == startingTotalPurchases + order.TotalAmount);
+        }
+
     }
 }

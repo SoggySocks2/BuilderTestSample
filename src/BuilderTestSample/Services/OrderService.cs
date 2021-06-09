@@ -42,9 +42,6 @@ namespace BuilderTestSample.Services
 
         private void ValidateAddress(Address homeAddress)
         {
-            // throw InvalidAddressException unless otherwise noted
-            // create an AddressBuilder to implement the tests for these scenarios
-
             if (string.IsNullOrWhiteSpace(homeAddress.Street1)) throw new InvalidAddressException("Address must have a street 1.");
 
             if (string.IsNullOrWhiteSpace(homeAddress.City)) throw new InvalidAddressException("Address must have a city.");
@@ -58,14 +55,17 @@ namespace BuilderTestSample.Services
 
         private void ExpediteOrder(Order order)
         {
-            // TODO: if customer's total purchases > 5000 and credit rating > 500 set IsExpedited to true
+            if(order.Customer.TotalPurchases > 5000 && order.Customer.CreditRating > 500)
+            {
+                order.IsExpedited = true;
+            }
         }
 
         private void AddOrderToCustomerHistory(Order order)
         {
-            // TODO: add the order to the customer
+            order.Customer.OrderHistory.Add(order);
 
-            // TODO: update the customer's total purchases property
+            order.Customer.TotalPurchases += order.TotalAmount;
         }
     }
 }
