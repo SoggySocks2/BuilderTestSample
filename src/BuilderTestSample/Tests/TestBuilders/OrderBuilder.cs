@@ -20,13 +20,16 @@ namespace BuilderTestSample.Tests.TestBuilders
             return _order;
         }
 
-        public OrderBuilder WithTestValues()
+        public OrderBuilder WithTestValues(Customer customer)
         {
+            _order.Id = 0;
             _order.TotalAmount = 100m;
+            _order.Customer = customer;
 
-            // TODO: replace next lines with a CustomerBuilder you create
-            // _order.Customer = new Customer();
-            // _order.Customer.HomeAddress = new Address();
+            if (customer != null)
+            {
+                _order.Customer.HomeAddress = customer.HomeAddress;
+            }
 
             return this;
         }

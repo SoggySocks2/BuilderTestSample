@@ -16,27 +16,26 @@ namespace BuilderTestSample.Services
 
         private void ValidateOrder(Order order)
         {
-            // throw InvalidOrderException unless otherwise noted.
-
-            // TODO: order ID must be zero (it's a new order)
             if (order.Id != 0) throw new InvalidOrderException("Order ID must be 0.");
 
-            // TODO: order amount must be greater than zero
-            // TODO: order must have a customer (customer is not null)
+            if (!(order.TotalAmount > 0)) throw new InvalidOrderException("TotalAmount must be greater than 0.");
+
+            if (order.Customer is null) throw new InvalidOrderException("Customer can not be null.");
 
             ValidateCustomer(order.Customer);
         }
 
         private void ValidateCustomer(Customer customer)
         {
-            // throw InvalidCustomerException unless otherwise noted
-            // create a CustomerBuilder to implement the tests for these scenarios
+            if(!(customer.Id > 0)) throw new InvalidOrderException("Customer id must be greater than 0.");
 
-            // TODO: customer must have an ID > 0
-            // TODO: customer must have an address (it is not null)
-            // TODO: customer must have a first and last name
-            // TODO: customer must have credit rating > 200 (otherwise throw InsufficientCreditException)
-            // TODO: customer must have total purchases >= 0
+            if (customer.HomeAddress is null) throw new InvalidOrderException("Customer address can not be null.");
+
+            if (string.IsNullOrWhiteSpace(customer.FirstName)) throw new InvalidOrderException("Customer must have a first name.");
+
+            if (!(customer.CreditRating > 200)) throw new InsufficientCreditException("Customer credit rating must be greater than 200.");
+
+            if (customer.TotalPurchases < 0) throw new InvalidOrderException("Customer total purchases can not be negative.");
 
             ValidateAddress(customer.HomeAddress);
         }
@@ -46,11 +45,15 @@ namespace BuilderTestSample.Services
             // throw InvalidAddressException unless otherwise noted
             // create an AddressBuilder to implement the tests for these scenarios
 
-            // TODO: street1 is required (not null or empty)
-            // TODO: city is required (not null or empty)
-            // TODO: state is required (not null or empty)
-            // TODO: postalcode is required (not null or empty)
-            // TODO: country is required (not null or empty)
+            if (string.IsNullOrWhiteSpace(homeAddress.Street1)) throw new InvalidAddressException("Address must have a street 1.");
+
+            if (string.IsNullOrWhiteSpace(homeAddress.City)) throw new InvalidAddressException("Address must have a city.");
+
+            if (string.IsNullOrWhiteSpace(homeAddress.State)) throw new InvalidAddressException("State must have a city.");
+
+            if (string.IsNullOrWhiteSpace(homeAddress.PostalCode)) throw new InvalidAddressException("State must have a postal code.");
+
+            if (string.IsNullOrWhiteSpace(homeAddress.Country)) throw new InvalidAddressException("State must have a country.");
         }
 
         private void ExpediteOrder(Order order)
